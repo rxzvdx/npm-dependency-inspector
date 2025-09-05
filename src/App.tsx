@@ -2,12 +2,13 @@ import { useState } from 'react'
 import ScorecardView from '@/components/Scorecard'
 import { fetchScorecard } from '@/lib/npm'
 import './index.css'
+import { Scorecard } from '@/types'
 
 export default function App() {
   const [pkg, setPkg] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)   
-  const [data, setData] = useState<any>(null)
+  const [data, setData] = useState<Scorecard | null>(null)
 
   // request id to ignore stale responses
   const [reqId, setReqId] = useState(0)
@@ -25,9 +26,10 @@ export default function App() {
       const res = await fetchScorecard(pkg)
       // only accept the latest response
       if (myId === reqId + 1) setData(res)
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (myId === reqId + 1) {
-        setError(err?.message ?? 'Unknown error')
+        const msg = err instanceof Error ? err.message : 'Unknown error'
+        setError(msg)
         setData(null)
       }
     } finally {
