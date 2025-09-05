@@ -6,7 +6,7 @@ import './index.css'
 export default function App() {
   const [pkg, setPkg] = useState('')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)   // ✅ no space before <
+  const [error, setError] = useState<string | null>(null)   
   const [data, setData] = useState<any>(null)
 
   // request id to ignore stale responses
@@ -16,7 +16,7 @@ export default function App() {
     e.preventDefault()
     setError(null)
     setLoading(true)
-    setData(null) // clear prior result for nicer UX
+    setData(null) // clear prior result 
 
     const myId = reqId + 1
     setReqId(myId)

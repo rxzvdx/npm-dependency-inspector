@@ -3,10 +3,10 @@
 FROM node:20-bullseye AS build          
 # in container, set working dir to /app
 WORKDIR /app
-# copy JUST package.json & lock file first
-COPY package.json package-lock.json*
+
+COPY package*.json ./
 # install dependencies
-RUN npm ci || npm i
+RUN npm ci --no-audit --no-fund || npm i --no-audit --no-fund
 # copy rest of proj into /app
 COPY . .
 # run build (vite --> dist folder)

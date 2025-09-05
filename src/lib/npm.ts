@@ -4,7 +4,7 @@ const REGISTRY = 'https://registry.npmjs.org'
 const DL_API   = 'https://api.npmjs.org/downloads/point/last-week'
 const PROXY    = 'https://cors.isomorphic-git.org/'
 
-// helper: detect JSON
+// helper, detect JSON
 function isJson(res: Response) {
   return (res.headers.get('content-type') || '').includes('application/json')
 }
@@ -19,12 +19,12 @@ async function getJsonOrThrow(res: Response) {
   }
   return res.json()
 }
-// try direct; if not JSON, retry via proxy
+// if not JSON, retry via proxy
 async function fetchJsonWithFallback(url: string) {
   try {
     const direct = await fetch(url, { mode: 'cors' })
     if (direct.ok && isJson(direct)) return direct.json()
-    // read text solely to include in the error message
+    // read text to include in the error message
     const sample = await direct.text().catch(() => '')
     console.warn('Direct fetch returned non-JSON; falling back to proxy:', sample.slice(0,120))
     // fall through to proxy
@@ -45,7 +45,6 @@ export async function fetchScorecard(pkg: string): Promise<Scorecard> {
   const raw = pkg.trim()
   if (!raw) throw new Error('Package name is required')
 
-  // ✅ normalize for npm registry (case-insensitive lookups)
   const name = raw.toLowerCase()
 
   const meta = await fetchJsonWithFallback(`${REGISTRY}/${encodeURIComponent(name)}`)
@@ -55,7 +54,7 @@ export async function fetchScorecard(pkg: string): Promise<Scorecard> {
     const dl = await fetchJsonWithFallback(`${DL_API}/${encodeURIComponent(name)}`)
     if (typeof dl.downloads === 'number') weeklyDownloads = dl.downloads
   } catch {
-    // keep downloads as null; not fatal
+    // keep downloads as null
   }
 
   const latest: string | undefined = meta['dist-tags']?.latest
@@ -70,7 +69,7 @@ export async function fetchScorecard(pkg: string): Promise<Scorecard> {
   if (meta.time) lastPublish = iso(meta.time.modified || (latest ? meta.time[latest] : null))
 
   return {
-    name: meta.name || name, // meta.name is already lowercase; fallback to normalized input
+    name: meta.name || name, 
     version: latest || meta.version || 'unknown',
     license,
     weeklyDownloads,
