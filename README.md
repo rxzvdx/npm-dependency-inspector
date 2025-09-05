@@ -1,4 +1,3 @@
-````md
 # NPM Package Dependency Inspector
 
 A single-page web application that fetches package metadata from the public NPM Registry and displays a quick, visual Package Scorecard for any given NPM package.
@@ -119,7 +118,7 @@ Located at `.github/workflows/ci.yml`:
 | Purpose          | Endpoint Example                                        |
 | ---------------- | ------------------------------------------------------- |
 | Package metadata | `https://registry.npmjs.org/react`                      |
-| Weekly downloads | `https://api.npmjs.org/downloads/point/last-week/react` |tarball
+| Weekly downloads | `https://api.npmjs.org/downloads/point/last-week/react` |
 
 ---
 
@@ -132,6 +131,3 @@ Located at `.github/workflows/ci.yml`:
 * CI/CD deployment via GitHub Pages or cloud platforms
 
 ---
-
-```
-```
